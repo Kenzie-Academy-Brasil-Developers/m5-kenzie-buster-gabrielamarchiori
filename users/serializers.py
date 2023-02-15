@@ -1,6 +1,15 @@
 from rest_framework import serializers
 from .models import User
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+class CustomJWTSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['is_superuser'] = user.is_superuser
+        return token
 
 
 class UserSerializer(serializers.Serializer):
@@ -25,3 +34,8 @@ class UserSerializer(serializers.Serializer):
                 validated_data['is_superuser'] = True
         
         return User.objects.create_user(**validated_data)
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150, write_only=True)
+    password = serializers.CharField(max_length=127, write_only=True)
