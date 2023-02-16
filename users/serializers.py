@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+import ipdb
 
 
 class CustomJWTSerializer(TokenObtainPairSerializer):
@@ -34,6 +35,16 @@ class UserSerializer(serializers.Serializer):
                 validated_data['is_superuser'] = True
         
         return User.objects.create_user(**validated_data)
+    
+    def update(self, instance: User, validated_data: dict):
+        for key, value in validated_data.items():
+            if key == 'password':
+                instance.set_password(value)
+            else:
+                setattr(instance, key, value)
+            
+        instance.save()
+        return instance
 
 
 class LoginSerializer(serializers.Serializer):
