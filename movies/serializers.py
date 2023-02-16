@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Movie
-from movies.models import RatingMovie
+from .models import Movie, RatingMovie, MovieOrder
+from users.models import User
 
 
 class MovieSerializer(serializers.Serializer):
@@ -19,3 +19,20 @@ class MovieSerializer(serializers.Serializer):
     
     def get_added_by(self, obj: Movie) -> str:
         return obj.user.email
+
+
+class MovieOrderSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.SerializerMethodField()
+    buyed_at = serializers.DateTimeField(read_only=True)
+    price = serializers.DecimalField(max_digits=8, decimal_places=2)
+    buyed_by = serializers.SerializerMethodField()
+
+    def get_title(self, obj: Movie) -> str:
+        return obj.movie.title
+    
+    def get_buyed_by(self, obj: User) -> str:
+        return obj.order.email
+
+    def create(self, validated_data: dict) -> MovieOrder:
+        return MovieOrder.objects.create(**validated_data)
