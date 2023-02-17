@@ -16,7 +16,7 @@ class MovieSerializer(serializers.Serializer):
 
     def create(self, validated_data: dict) -> Movie:
         return Movie.objects.create(**validated_data)
-    
+
     def get_added_by(self, obj: Movie) -> str:
         return obj.user.email
 
@@ -30,7 +30,7 @@ class MovieOrderSerializer(serializers.Serializer):
 
     def get_title(self, obj: Movie) -> str:
         return obj.movie.title
-    
+
     def get_buyed_by(self, obj: User) -> str:
         return obj.order.email
 

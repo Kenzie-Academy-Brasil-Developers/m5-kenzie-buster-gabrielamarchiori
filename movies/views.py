@@ -42,7 +42,6 @@ class MovieDetailView(APIView):
     def delete(self, request: Request, movie_id) -> Response:
         movie = get_object_or_404(Movie, id=movie_id)
         movie.delete()
-        
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

@@ -21,7 +21,7 @@ class UserView(APIView):
         serializer.save()
 
         return Response(serializer.data, status.HTTP_201_CREATED)
-  
+
     def get(self, request) -> Response:
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -38,11 +38,10 @@ class UserDetailView(APIView):
         serializer = UserSerializer(user)
 
         return Response(serializer.data, status.HTTP_200_OK)
-    
+
     def patch(self, request: Request, user_id):
         user = get_object_or_404(User, id=user_id)
         self.check_object_permissions(request, user)
-        
         serializer = UserSerializer(user, request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()

@@ -19,7 +19,6 @@ class Movie(models.Model):
         default=RatingMovie.G
     )
     synopsis = models.TextField(null=True, default=None)
-    
     user = models.ForeignKey(
         'users.User',
         on_delete=models.CASCADE,
